@@ -26,7 +26,7 @@ spec:
       steps {
         container(name: 'kaniko', shell: '/busybox/sh') {
           }
-        }
+        
       }
     }
   }
