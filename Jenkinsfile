@@ -1,33 +1,13 @@
 pipeline {
-  agent {
-    kubernetes {
-      yaml """
-apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    name: remote-agent
-spec:
-  containers:
-  - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug
-    imagePullPolicy: Always
-    command:
-    - /busybox/cat
-    tty: true
-    env:
-    - name: GOOGLE_APPLICATION_CREDENTIALS
-      value: "/kaniko/config.json"
-"""      
+    agent any
+    stages { 
+        stage('Building our image') { 
+            steps { 
+                script { 
+                    sh "docker build . -t moonzkim/ai-service-fastapi:0.2.0"
+                    sh "docker images" 
+                }
+            } 
+        }
     }
-  }
-  stages {
-    stage('Build & Push') {
-      steps {
-        container(name: 'kaniko', shell: '/busybox/sh') {
-          }
-        
-      }
-    }
-  }
 }
