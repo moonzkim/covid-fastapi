@@ -3,11 +3,18 @@ pipeline {
     stages { 
         stage('Building our image') { 
             steps { 
-                script { 
-		    sh "ls"
-                    sh "docker build . -t moonzkim/ai-service-fastapi:0.2.0"
-                    sh "docker images" 
-                }
+                script {
+                  // CUSTOM REGISTRY
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub') {
+
+                        /* Build the container image */
+                        def dockerImage = docker.build("moonzkim/ai-service-fastapi:0.2.0")
+
+                        /* Push the container to the custom Registry */
+                        dockerImage.push()
+
+                    }
+               }
             } 
         }
     }
