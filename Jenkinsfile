@@ -1,19 +1,11 @@
 pipeline {
-    agent {
-        kubernetes {
-            defaultContainer 'jnlp'
-            yamlFile 'agentpod.yaml'
-        }
-    }
+    agent any
     stages { 
-        stage('Building image') { 
+        stage('Building our image') { 
             steps { 
-                container('docker') {
-                
-                
-                    sh "docker build . -t moonzkim/ai-service-fastapi:0.2.0"
-                    sh "docker images" 
-                
+                script { 
+                    sh "./docker/docker build . -t moonzkim/ai-service-fastapi:0.2.0"
+                    sh "./docker/docker images" 
                 }
             } 
         }
